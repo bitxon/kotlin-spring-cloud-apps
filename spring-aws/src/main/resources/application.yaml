@@ -1,0 +1,15 @@
+spring:
+  application.name: spring-aws
+
+  cloud:
+    aws:
+      endpoint: http://localhost:4566
+      region.static: us-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      s3:
+        chunked-encoding-enabled: false # LocalStack does not always handle chunked encoding properly
+        path-style-access-enabled: true # LocalStack S3 requires path-style access, while AWS S3 uses virtual-hosted-style URLs
+      sqs:
+        queue-not-found-strategy: fail
