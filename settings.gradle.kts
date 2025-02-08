@@ -4,4 +4,7 @@ plugins {
 
 rootProject.name = "kotlin-spring-clouds"
 
-include("spring-aws")
+include(
+    "spring-aws",
+    "spring-azure"
+)
