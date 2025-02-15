@@ -1,5 +1,6 @@
 package bitxon.cloud.springazure
 
+import bitxon.cloud.springazure.database.Student
 import bitxon.cloud.springazure.storage.Diploma
 import io.restassured.RestAssured
 import io.restassured.common.mapper.TypeRef
@@ -43,6 +44,24 @@ class AzureApplicationTests {
             .then().statusCode(200).extract().`as`(object : TypeRef<List<Diploma>>() {})
 
         assertThat(results).containsExactlyInAnyOrderElementsOf(diplomas)
+    }
+
+    @Test
+    fun students() {
+        val student = Student("1", "John Doe", "A")
+
+        // Create student
+        RestAssured
+            .given().body(student).contentType(ContentType.JSON)
+            .`when`().post("/students")
+            .then().statusCode(200)
+
+        // Get student
+        val result = RestAssured
+            .`when`().get("/students/${student.id}")
+            .then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
+
+        assertThat(result).isEqualTo(student)
     }
 
 }

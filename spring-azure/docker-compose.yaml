@@ -3,8 +3,22 @@ services:
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite:latest
     container_name: azurite
+    restart: always
     ports:
       - "10000:10000" # Blob service
       - "10001:10001" # Queue service
       - "10002:10002" # Table service
     command: "azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0"
+
+  cosmosdb-emulator:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview
+    container_name: cosmosdb-emulator
+    restart: always
+    ports:
+      - "8081:8081"   # Azure Cosmos DB emulator
+      - "1234:1234"   # Data explorer
+    environment:
+      PROTOCOL: https
+      ENABLE_EXPLORER: true
+      EXPLORER_PROTOCOL: http
+      LOG_LEVEL: trace
