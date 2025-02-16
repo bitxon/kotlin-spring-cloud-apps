@@ -14,18 +14,14 @@ import java.security.KeyStore
 import kotlin.io.path.Path
 import kotlin.io.path.outputStream
 
-private val DEFAULT_IMAGE_NAME: DockerImageName =
+private val DEFAULT_IMAGE: DockerImageName =
     DockerImageName.parse("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview")
 
-class CosmosDBEmulatorVNextContainer(
-    dockerImageName: DockerImageName = DEFAULT_IMAGE_NAME
-) : GenericContainer<CosmosDBEmulatorVNextContainer>(dockerImageName) {
+class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
 
     private val port: Int = getRandomAvailablePort()
 
     init {
-        dockerImageName.assertCompatibleWith(DEFAULT_IMAGE_NAME)
-
         withExposedPorts(port)
         withEnv("PORT", port.toString())
         withEnv("PROTOCOL", "https")

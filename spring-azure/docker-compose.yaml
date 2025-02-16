@@ -22,3 +22,20 @@ services:
       ENABLE_EXPLORER: true
       EXPLORER_PROTOCOL: http
       LOG_LEVEL: trace
+
+  eventhub:
+    image: "mcr.microsoft.com/azure-messaging/eventhubs-emulator:latest"
+    container_name: eventhub
+    restart: always
+    volumes:
+      - "./src/test/resources/configs/eventhub.json:/Eventhubs_Emulator/ConfigFiles/Config.json"
+    ports:
+      - "5672:5672"
+      - "9092:9092"
+    environment:
+      BLOB_SERVER: azurite
+      METADATA_SERVER: azurite
+      ACCEPT_EULA: "Y"
+    depends_on:
+      - azurite
+

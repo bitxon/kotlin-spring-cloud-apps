@@ -40,6 +40,8 @@ dependencies {
 //    implementation("com.azure.spring:spring-cloud-azure-starter-actuator")
     implementation("com.azure.spring:spring-cloud-azure-starter-data-cosmos")
     implementation("com.azure.spring:spring-cloud-azure-starter-storage")
+    implementation("com.azure.spring:spring-cloud-azure-starter-integration-eventhubs") // ??? Remove ???
+    implementation("org.springframework.kafka:spring-kafka")
 
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -50,6 +52,7 @@ dependencies {
     testImplementation("org.testcontainers:azure")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.assertj:assertj-core")
+    testImplementation("org.awaitility:awaitility")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

@@ -6,7 +6,9 @@ import io.restassured.RestAssured
 import io.restassured.common.mapper.TypeRef
 import io.restassured.http.ContentType
 import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*
@@ -62,6 +64,19 @@ class AzureApplicationTests {
             .then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
 
         assertThat(result).isEqualTo(student)
+    }
+
+    @Test
+    @Disabled("No init messages in Azure Event Hub") // TODO: Add EventHub init script or send message to EventHub
+    fun studentsFromEventHub() {
+        val expectedStudent = Student("6", "Frank", "A") // Student created in init script for EventHub
+
+        await().untilAsserted {
+            val result = RestAssured
+                .`when`().get("/students/${expectedStudent.id}")
+                .then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
+            assertThat(result).isEqualTo(expectedStudent)
+        }
     }
 
 }
