@@ -1,24 +1,37 @@
 
 # Spring Cloud AWS
 
+## Run Application
+1. Start Infrastructure
+    ```shell
+    docker compose up -d
+    ```
+
+2. Run App
+    ```shell
+    gradle bootRun
+    ```
+
 ---
-## Application
+## Test Application
 
-```shell
-curl -X POST 'http://localhost:8080/students' -H "Content-Type: application/json" \
-  -d '{"id":"100", "name":"John Doe", "status":"A"}' --silent | jq
-```
-```shell
-curl -X GET 'http://localhost:8080/students/100' --silent | jq
-```
+1. CosmosDb Save & Read
+    ```shell
+    curl -X POST 'http://localhost:8080/students' -H "Content-Type: application/json" \
+      -d '{"id":"100", "name":"John Doe", "status":"A"}' | jq
+    ```
+    ```shell
+    curl -X GET 'http://localhost:8080/students/100' | jq
+    ```
 
-```shell
-curl -X POST 'http://localhost:8080/diplomas' -H "Content-Type: application/json" \
-  -d '[{"student":"John Doe 1", "year":2001}, {"student":"John Doe 2", "year":2002}]' --silent | jq
-```
-```shell
-curl -X GET 'http://localhost:8080/diplomas' --silent | jq
-```
+2. Storage Save & Read
+    ```shell
+    curl -X POST 'http://localhost:8080/diplomas' -H "Content-Type: application/json" \
+      -d '[{"student":"John Doe 1", "year":2001}, {"student":"John Doe 2", "year":2002}]' | jq
+    ```
+    ```shell
+    curl -X GET 'http://localhost:8080/diplomas' | jq
+    ```
 
 ---
 ## LocalStack

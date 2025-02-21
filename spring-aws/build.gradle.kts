@@ -40,6 +40,10 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:localstack")
+    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("org.awaitility:awaitility")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
