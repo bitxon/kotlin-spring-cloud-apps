@@ -6,5 +6,6 @@ rootProject.name = "kotlin-spring-clouds"
 
 include(
     "spring-aws",
-    "spring-azure"
+    "spring-azure",
+    "spring-gcp"
 )

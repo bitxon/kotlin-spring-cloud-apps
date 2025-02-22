@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spring-gcp
+
+  cloud:
+    gcp:
+      secretmanager:
+        enabled: false
+      firestore:
+        emulator.enabled: true
+        host-port: localhost:8091
+
