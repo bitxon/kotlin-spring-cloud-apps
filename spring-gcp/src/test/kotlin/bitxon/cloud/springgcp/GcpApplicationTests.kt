@@ -1,6 +1,7 @@
 package bitxon.cloud.springgcp
 
 import bitxon.cloud.springgcp.database.Student
+import bitxon.cloud.springgcp.storage.Diploma
 import io.restassured.RestAssured
 import io.restassured.common.mapper.TypeRef
 import io.restassured.http.ContentType
@@ -24,6 +25,27 @@ class GcpApplicationTests {
 	@BeforeEach
 	fun setUp() {
 		RestAssured.port = port
+	}
+
+	@Test
+	fun diplomas() {
+		val diplomas = listOf(
+			Diploma("John Doe1", 1992),
+			Diploma("Jane Doe2", 2005)
+		)
+
+		// Create diplomas
+		RestAssured
+			.given().body(diplomas).contentType(ContentType.JSON)
+			.`when`().post("/diplomas")
+			.then().statusCode(200)
+
+		// Get diplomas
+		val results = RestAssured
+			.`when`().get("/diplomas")
+			.then().statusCode(200).extract().`as`(object : TypeRef<List<Diploma>>() {})
+
+		assertThat(results).containsExactlyInAnyOrderElementsOf(diplomas)
 	}
 
 

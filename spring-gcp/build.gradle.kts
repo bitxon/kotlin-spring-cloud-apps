@@ -40,7 +40,7 @@ dependencies {
 //	implementation("com.google.cloud:spring-cloud-gcp-starter")
 	implementation("com.google.cloud:spring-cloud-gcp-starter-data-firestore")
 //	implementation("com.google.cloud:spring-cloud-gcp-starter-pubsub")
-//	implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
+	implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

@@ -40,3 +40,11 @@
 ```shell
 curl -X GET "http://localhost:8091/v1/projects/null/databases/(default)/documents/students"
 ```
+
+### Storage
+```shell
+curl http://0.0.0.0:8093/storage/v1/b
+```
+```shell
+curl http://0.0.0.0:8093/storage/v1/b/student-bucket/o
+```

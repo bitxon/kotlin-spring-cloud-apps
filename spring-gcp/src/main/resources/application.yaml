@@ -4,9 +4,13 @@ spring:
 
   cloud:
     gcp:
+      project-id: your-project-id
+      development-mode: true # Custom property to enable smooth integration with emulators
       secretmanager:
         enabled: false
       firestore:
         emulator.enabled: true
         host-port: localhost:8091
+      storage:
+        host: http://0.0.0.0:8093
 

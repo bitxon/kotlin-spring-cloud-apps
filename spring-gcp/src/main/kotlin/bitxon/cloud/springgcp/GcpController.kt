@@ -2,6 +2,8 @@ package bitxon.cloud.springgcp
 
 import bitxon.cloud.springgcp.database.Student
 import bitxon.cloud.springgcp.database.StudentRepository
+import bitxon.cloud.springgcp.storage.Diploma
+import bitxon.cloud.springgcp.storage.DiplomaStorage
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -12,7 +14,8 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 class GcpController(
-    private val repository: StudentRepository
+    private val repository: StudentRepository,
+    private val storage: DiplomaStorage
 ){
 
     @GetMapping("/students/{id}")
@@ -23,5 +26,15 @@ class GcpController(
     @PostMapping("/students")
     fun postStudent(@RequestBody student: Student): Student {
         return repository.save(student).block() ?: throw ResponseStatusException(INTERNAL_SERVER_ERROR)
+    }
+
+    @GetMapping("/diplomas")
+    fun getDiplomas(): List<Diploma> {
+        return storage.readDiplomasArchive()
+    }
+
+    @PostMapping("/diplomas")
+    fun postDiplomas(@RequestBody diplomas: List<Diploma>): List<Diploma> {
+        return storage.writeDiplomasArchive(diplomas)
     }
 }

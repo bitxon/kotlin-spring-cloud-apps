@@ -6,3 +6,12 @@ services:
     command: gcloud beta emulators firestore start --host-port=0.0.0.0:8091
     ports:
       - "8091:8091"
+
+  storage-emulator:
+    image: fsouza/fake-gcs-server
+    container_name: storage-emulator
+    volumes:
+      - ./src/test/resources/data:/data
+    command: ["-scheme", "http", "-port", "8093", "-external-url", "http://localhost:8093", "-backend", "memory"]
+    ports:
+      - "8093:8093"
