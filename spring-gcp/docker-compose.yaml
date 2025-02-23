@@ -7,6 +7,13 @@ services:
     ports:
       - "8091:8091"
 
+  pubsub-emulator:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    container_name: pubsub-emulator
+    command: gcloud beta emulators pubsub start --host-port=0.0.0.0:8092
+    ports:
+      - "8092:8092"
+
   storage-emulator:
     image: fsouza/fake-gcs-server
     container_name: storage-emulator
@@ -15,3 +22,36 @@ services:
     command: ["-scheme", "http", "-port", "8093", "-external-url", "http://localhost:8093", "-backend", "memory"]
     ports:
       - "8093:8093"
+
+
+  setup-pubsub:
+    image: buildpack-deps:24.04-curl
+    depends_on:
+      - pubsub-emulator
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Waiting for Pub/Sub emulator..."
+        until curl -s http://pubsub-emulator:8092/; do sleep 1; done
+        echo "Pub/Sub emulator is up!"
+
+        echo "Creating topic..."
+        curl -sS -X PUT "http://pubsub-emulator:8092/v1/projects/your-project-id/topics/student-updates"
+
+        echo "Creating subscription..."
+        curl -sS -X PUT "http://pubsub-emulator:8092/v1/projects/your-project-id/subscriptions/student-updates-subscription" \
+          -H "Content-Type: application/json" --data '{ "topic": "projects/your-project-id/topics/student-updates" }'
+        
+        echo "Sending messages..."
+        curl -sS -X POST "http://pubsub-emulator:8092/v1/projects/your-project-id/topics/student-updates:publish" \
+          -H "Content-Type: application/json" \
+          --data '{
+            "messages": [
+              { "data": "'$(echo -n '{"id":"6", "name":"Frank", "status":"A"}' | base64)'" },
+              { "data": "'$(echo -n '{"id":"7", "name":"Grace", "status":"G"}' | base64)'" },
+              { "data": "'$(echo -n '{"id":"8", "name":"Helen", "status":"I"}' | base64)'" },
+              { "data": "'$(echo -n '{"id":"9", "name":"Ivan", "status":"E"}' | base64)'" },
+              { "data": "'$(echo -n '{"id":"10", "name":"Jack", "status":"A"}' | base64)'" }
+            ]
+          }'
+        echo "Setup complete!"

@@ -37,9 +37,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-//	implementation("com.google.cloud:spring-cloud-gcp-starter")
 	implementation("com.google.cloud:spring-cloud-gcp-starter-data-firestore")
-//	implementation("com.google.cloud:spring-cloud-gcp-starter-pubsub")
+	implementation("com.google.cloud:spring-cloud-gcp-starter-pubsub")
 	implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 

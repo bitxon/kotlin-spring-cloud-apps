@@ -67,4 +67,16 @@ class GcpApplicationTests {
 		assertThat(result).isEqualTo(student)
 	}
 
+	@Test
+	fun studentsFromPubSub() {
+		val expectedStudent = Student("6", "Frank", "A") // Student created in init script for Pub/Sub
+
+		await().untilAsserted {
+			val result = RestAssured
+				.`when`().get("/students/${expectedStudent.id}")
+				.then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
+			assertThat(result).isEqualTo(expectedStudent)
+		}
+	}
+
 }
