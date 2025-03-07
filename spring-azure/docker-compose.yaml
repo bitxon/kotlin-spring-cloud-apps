@@ -18,7 +18,7 @@ services:
       - "8081:8081"   # Azure Cosmos DB emulator
       - "1234:1234"   # Data explorer
     environment:
-      PROTOCOL: https
+      PROTOCOL: http
       ENABLE_EXPLORER: true
       EXPLORER_PROTOCOL: http
       LOG_LEVEL: trace

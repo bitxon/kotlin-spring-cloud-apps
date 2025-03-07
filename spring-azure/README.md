@@ -8,14 +8,14 @@
     docker-compose up -d
     ```
 
-2. Extract certificates (.crt) & (*.pem)
+2. Extract certificates (Only for HTTPS connection)
     ```shell
     mkdir -p .temp
     docker cp cosmosdb-emulator:/scripts/certs/domain.crt .temp/domain.crt
     docker cp cosmosdb-emulator:/scripts/certs/rootCA.crt .temp/rootCA.crt
     ```
 
-3. Save to Java truststore
+3. Save to Java truststore (Only for HTTPS connection)
     ```shell
     keytool -delete -alias cosmosdb-root -cacerts -storepass changeit -noprompt
     keytool -importcert -alias cosmosdb-root -file .temp/rootCA.crt -trustcacerts -cacerts -storepass changeit -noprompt

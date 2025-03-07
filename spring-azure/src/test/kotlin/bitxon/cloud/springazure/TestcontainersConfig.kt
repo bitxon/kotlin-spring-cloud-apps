@@ -33,6 +33,7 @@ class TestcontainersConfig {
 
     @Bean
     fun cosmosDbContainer() = CosmosDbContainer()
+        .withProtocol("http")
 
     @Bean
     fun eventHubsContainer(azuriteContainer: AzuriteContainer) = EventHubContainer()

@@ -20,11 +20,12 @@ private val DEFAULT_IMAGE: DockerImageName =
 class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
 
     private val port: Int = getRandomAvailablePort()
+    private var protocol: String = "https"
 
     init {
         withExposedPorts(port)
         withEnv("PORT", port.toString())
-        withEnv("PROTOCOL", "https")
+        withEnv("PROTOCOL", protocol)
         withEnv("ENABLE_EXPLORER", "false")
         withEnv("LOG_LEVEL", "trace")
         withCreateContainerCmdModifier { cmd ->
@@ -33,17 +34,29 @@ class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
         waitingFor(Wait.forLogMessage(".*Now listening on.*\\n", 1))
     }
 
+    fun withProtocol(protocol: String): CosmosDbContainer {
+        this.protocol = protocol
+        return withEnv("PROTOCOL", protocol)
+    }
+
     override fun containerIsStarted(containerInfo: InspectContainerResponse?) {
         super.containerIsStarted(containerInfo)
 
-        val tempFolderPath = Files.createTempDirectory("certs")
-        val keyStoreFilePath = Path(tempFolderPath.toString(), "azure-cosmos-emulator.keystore")
-        val keyStore = this.buildNewKeyStore()
-        keyStore.store(keyStoreFilePath.outputStream(), emulatorKey.toCharArray())
+        when(protocol) {
+            "http" -> {
+                System.setProperty("COSMOS.HTTP_CONNECTION_WITHOUT_TLS_ALLOWED", "true")
+            }
+            "https" -> {
+                val tempFolderPath = Files.createTempDirectory("certs")
+                val keyStoreFilePath = Path(tempFolderPath.toString(), "azure-cosmos-emulator.keystore")
+                val keyStore = this.buildNewKeyStore()
+                keyStore.store(keyStoreFilePath.outputStream(), emulatorKey.toCharArray())
 
-        System.setProperty("javax.net.ssl.trustStore", keyStoreFilePath.toString())
-        System.setProperty("javax.net.ssl.trustStorePassword", emulatorKey)
-        System.setProperty("javax.net.ssl.trustStoreType", "PKCS12")
+                System.setProperty("javax.net.ssl.trustStore", keyStoreFilePath.toString())
+                System.setProperty("javax.net.ssl.trustStorePassword", emulatorKey)
+                System.setProperty("javax.net.ssl.trustStoreType", "PKCS12")
+            }
+        }
     }
 
     fun buildNewKeyStore(): KeyStore {
@@ -54,7 +67,7 @@ class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
         get() = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
 
     val emulatorEndpoint: String
-        get() = "https://${this.host}:${getMappedPort(port)}"
+        get() = "${protocol}://${this.host}:${getMappedPort(port)}"
 
     private fun getRandomAvailablePort(): Int {
         return ServerSocket(0).use { it.localPort }
