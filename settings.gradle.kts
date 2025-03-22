@@ -2,7 +2,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = "kotlin-spring-clouds"
+rootProject.name = "kotlin-spring-cloud-apps"
 
 include(
     "spring-aws",

@@ -22,4 +22,4 @@ Comparison done as of 2025-03-01
 |-----------|--------------|---------------|-------------|------|
 | Firestore | ✅ Official   | ❌No support   | ❌No support | ---  |
 | Storage   | ⚠️ Custom    | ✅ Mount       | ✅ Mount     | ---  |
-| Pub/Sub   | ✅ Official   | ✅ Config      | ❌No support | ---  |
+| Pub/Sub   | ✅ Official   | ✅ REST        | ✅ REST      | ---  |
