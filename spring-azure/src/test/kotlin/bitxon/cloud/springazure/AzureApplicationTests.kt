@@ -2,14 +2,15 @@ package bitxon.cloud.springazure
 
 import bitxon.cloud.springazure.database.Student
 import bitxon.cloud.springazure.storage.Diploma
+import bitxon.cloud.springazure.testutil.KafkaWriter
 import io.restassured.RestAssured
 import io.restassured.common.mapper.TypeRef
 import io.restassured.http.ContentType
 import org.assertj.core.api.Assertions.assertThat
 import org.awaitility.Awaitility.await
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.*
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -21,6 +22,8 @@ class AzureApplicationTests {
 
     @LocalServerPort
     private val port: Int = 0
+    @Autowired
+    lateinit var kafkaWriter: KafkaWriter
 
     @BeforeEach
     fun setUp() {
@@ -67,8 +70,9 @@ class AzureApplicationTests {
     }
 
     @Test
-    @Disabled("No init messages in Azure Event Hub") // TODO: Add EventHub init script or send message to EventHub
     fun studentsFromEventHub() {
+        kafkaWriter.send("""{"id":"6","name":"Frank","status":"A"}""") // TODO find a way to do this via init script
+
         val expectedStudent = Student("6", "Frank", "A") // Student created in init script for EventHub
 
         await().untilAsserted {

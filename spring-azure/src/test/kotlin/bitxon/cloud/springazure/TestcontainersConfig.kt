@@ -3,6 +3,7 @@ package bitxon.cloud.springazure
 import bitxon.cloud.springazure.testcontainers.AzuriteContainer
 import bitxon.cloud.springazure.testcontainers.EventHubContainer
 import bitxon.cloud.springazure.testcontainers.CosmosDbContainer
+import bitxon.cloud.springazure.testutil.KafkaWriter
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
@@ -39,5 +40,10 @@ class TestcontainersConfig {
     fun eventHubsContainer(azuriteContainer: AzuriteContainer) = EventHubContainer()
         .withConfig(MountableFile.forClasspathResource("configs/eventhub.json"))
         .withAzuriteContainer(azuriteContainer)
+
+    @Bean // This is a test utility bean helps to write messages to Kafka, so we can test our Kafka listeners
+    fun kafkaWriter(eventHub: EventHubContainer): KafkaWriter {
+        return KafkaWriter(eventHub.bootstrapServers, "students-eventhub", eventHub.jaasConfig)
+    }
 
 }

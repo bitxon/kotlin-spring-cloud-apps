@@ -1,5 +1,9 @@
 package bitxon.cloud.springazure.testcontainers
 
+import com.github.dockerjava.api.model.ExposedPort
+import com.github.dockerjava.api.model.HostConfig
+import com.github.dockerjava.api.model.PortBinding
+import com.github.dockerjava.api.model.Ports
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.images.builder.Transferable
@@ -21,6 +25,13 @@ class EventHubContainer() : GenericContainer<EventHubContainer>(DEFAULT_IMAGE) {
     init {
         waitingFor(Wait.forLogMessage(".*Emulator Service is Successfully Up!.*", 1))
         withExposedPorts(AMQP_PORT, KAFKA_PORT)
+        withCreateContainerCmdModifier { cmd ->
+            cmd.withHostConfig(HostConfig().withPortBindings(
+                // Fore some reason Apache Kafka requires to be on port 9092 to be working
+                PortBinding(Ports.Binding.bindPort(KAFKA_PORT), ExposedPort(KAFKA_PORT)),
+                PortBinding(Ports.Binding.bindPort(AMQP_PORT), ExposedPort(AMQP_PORT))
+            ))
+        }
         withEnv("ACCEPT_EULA", "Y")
     }
 
