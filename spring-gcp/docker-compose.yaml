@@ -1,22 +1,22 @@
 version: '3.8'
 services:
-  firestore-emulator:
+  firestore:
     image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
-    container_name: firestore-emulator
+    container_name: firestore
     command: gcloud beta emulators firestore start --host-port=0.0.0.0:8091
     ports:
       - "8091:8091"
 
-  pubsub-emulator:
+  pubsub:
     image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
-    container_name: pubsub-emulator
+    container_name: pubsub
     command: gcloud beta emulators pubsub start --host-port=0.0.0.0:8092
     ports:
       - "8092:8092"
 
-  storage-emulator:
+  storage:
     image: fsouza/fake-gcs-server
-    container_name: storage-emulator
+    container_name: storage
     volumes:
       - ./src/test/resources/data:/data
     command: ["-scheme", "http", "-port", "8093", "-external-url", "http://localhost:8093", "-backend", "memory"]
@@ -27,23 +27,23 @@ services:
   setup-pubsub:
     image: buildpack-deps:24.04-curl
     depends_on:
-      - pubsub-emulator
+      - pubsub
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
         echo "Waiting for Pub/Sub emulator..."
-        until curl -s http://pubsub-emulator:8092/; do sleep 1; done
+        until curl -s http://pubsub:8092/; do sleep 1; done
         echo "Pub/Sub emulator is up!"
 
         echo "Creating topic..."
-        curl -sS -X PUT "http://pubsub-emulator:8092/v1/projects/your-project-id/topics/student-updates"
+        curl -sS -X PUT "http://pubsub:8092/v1/projects/your-project-id/topics/student-updates"
 
         echo "Creating subscription..."
-        curl -sS -X PUT "http://pubsub-emulator:8092/v1/projects/your-project-id/subscriptions/student-updates-subscription" \
+        curl -sS -X PUT "http://pubsub:8092/v1/projects/your-project-id/subscriptions/student-updates-subscription" \
           -H "Content-Type: application/json" --data '{ "topic": "projects/your-project-id/topics/student-updates" }'
         
         echo "Sending messages..."
-        curl -sS -X POST "http://pubsub-emulator:8092/v1/projects/your-project-id/topics/student-updates:publish" \
+        curl -sS -X POST "http://pubsub:8092/v1/projects/your-project-id/topics/student-updates:publish" \
           -H "Content-Type: application/json" \
           --data '{
             "messages": [

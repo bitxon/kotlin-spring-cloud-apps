@@ -11,8 +11,8 @@
 2. Extract certificates (Only for HTTPS connection)
     ```shell
     mkdir -p .temp
-    docker cp cosmosdb-emulator:/scripts/certs/domain.crt .temp/domain.crt
-    docker cp cosmosdb-emulator:/scripts/certs/rootCA.crt .temp/rootCA.crt
+    docker cp cosmosdb:/scripts/certs/domain.crt .temp/domain.crt
+    docker cp cosmosdb:/scripts/certs/rootCA.crt .temp/rootCA.crt
     ```
 
 3. Save to Java truststore (Only for HTTPS connection)
