@@ -1,9 +1,10 @@
 package bitxon.cloud.springaws
 
+import io.floci.testcontainers.FlociContainer
 import org.springframework.boot.test.context.TestConfiguration
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
-import org.springframework.test.context.DynamicPropertyRegistrar
-import org.testcontainers.localstack.LocalStackContainer
+import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.utility.DockerImageName
 import org.testcontainers.utility.MountableFile
 
@@ -11,21 +12,12 @@ import org.testcontainers.utility.MountableFile
 class TestcontainersConfig {
 
     @Bean
-    fun localStack(): LocalStackContainer {
-        return LocalStackContainer(DockerImageName.parse("localstack/localstack:4.14.0"))
-            .withServices("dynamodb", "s3", "sqs")
-            .withCopyToContainer(MountableFile.forClasspathResource("scripts"), "/etc/localstack/init/ready.d")
-    }
-
-    @Bean
-    fun propertiesOverride(localstack: LocalStackContainer): DynamicPropertyRegistrar {
-        return DynamicPropertyRegistrar { registry ->
-            registry.add("spring.cloud.aws.endpoint") { localstack.endpoint }
-            registry.add("spring.cloud.aws.region.static") { localstack.region }
-            registry.add("spring.cloud.aws.credentials.access-key") { localstack.accessKey }
-            registry.add("spring.cloud.aws.credentials.secret-key") { localstack.secretKey }
-            registry.add("spring.cloud.aws.s3.chunked-encoding-enabled") { false }
-            registry.add("spring.cloud.aws.s3.path-style-access-enabled") { true }
-        }
+    @ServiceConnection
+    fun floci(): FlociContainer {
+        return FlociContainer(DockerImageName.parse("floci/floci:1.5.10-aws"))
+            .withCopyToContainer(MountableFile.forClasspathResource("scripts"), "/etc/floci/init/start.d")
+            // Floci runs init scripts async after HTTP is up; wait for the last script's output
+            // to ensure all resources (DynamoDB table, S3 bucket, SQS queue) are created before tests start
+            .waitingFor(Wait.forLogMessage(".*SQS queue created.*", 1))
     }
 }

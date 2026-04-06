@@ -9,7 +9,6 @@ spring:
         access-key: test
         secret-key: test
       s3:
-        chunked-encoding-enabled: false # LocalStack does not always handle chunked encoding properly
-        path-style-access-enabled: true # LocalStack S3 requires path-style access, while AWS S3 uses virtual-hosted-style URLs
+        chunked-encoding-enabled: false # Floci does not always handle chunked encoding properly
       sqs:
         queue-not-found-strategy: fail

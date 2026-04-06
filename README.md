@@ -1,13 +1,13 @@
 # Spring Boot Cloud - AWS | Azure | GCP
 
 ## Local Development Comparison
-Comparison done as of 2025-03-01
+Comparison done as of 2026-04-01
 ### AWS
 | Service  | Docker Image | Init Resource | Init Data |
 |----------|--------------|---------------|-----------|
-| DynamoDB | ✅ LocalStack | ✅ Script      | ✅ Script  |
-| S3       | ✅ LocalStack | ✅ Script      | ✅ Script  |
-| SQS      | ✅ LocalStack | ✅ Script      | ✅ Script  |
+| DynamoDB | ✅ Floci      | ✅ Script      | ✅ Script  |
+| S3       | ✅ Floci      | ✅ Script      | ✅ Script  |
+| SQS      | ✅ Floci      | ✅ Script      | ✅ Script  |
 
 ### Azure
 | Service  | Docker Image | Init Resource | Init Data   |

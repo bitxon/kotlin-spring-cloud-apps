@@ -1,21 +1,20 @@
 # Spring Cloud GCP
 
-# Run Application
+## Start
 
 1. Start Infrastructure
     ```shell
-    docker-compose up -d
+    docker compose up -d
     ```
-
-2. Run
+2. Run Application
     ```shell
     gradle bootRun
     ```
-
 ---
+
 ## Test Application
 
-1. CosmosDb Save & Read
+1. Firestore Save & Read
     ```shell
     curl -sS -X POST 'http://localhost:8080/students' -H "Content-Type: application/json" \
       -d '{"id":"100", "name":"John Doe", "status":"A"}' | jq
@@ -32,14 +31,16 @@
     ```shell
     curl -sS -X GET 'http://localhost:8080/diplomas' | jq
     ```
-
 ---
-## GCP
+
+## Test Infrastructure
 
 ### FireStore
 ```shell
-curl -X GET "http://localhost:8091/v1/projects/null/databases/(default)/documents/students"
+curl -sS -X GET "http://localhost:8091/v1/projects/null/databases/(default)/documents/students"
 ```
+Note: the REST API only shows REST-written data, not gRPC-written data. (This is a Firestore emulator limitation)
+Application uses gRPC and that data is invisible to the REST listDocuments endpoint
 
 ### PubSub
 ```shell
@@ -67,11 +68,10 @@ curl -sS -X POST "http://localhost:8092/v1/projects/your-project-id/subscription
   --data '{ "maxMessages": 10 }' | jq '.receivedMessages[] | { data: (.message.data | @base64d), publishTime: .message.publishTime }'
 ```
 
-
 ### Storage
 ```shell
-curl http://localhost:8093/storage/v1/b
+curl -sS -X http://localhost:8093/storage/v1/b | jq
 ```
 ```shell
-curl http://localhost:8093/storage/v1/b/student-bucket/o
+curl -sS -X http://localhost:8093/storage/v1/b/student-bucket/o | jq
 ```

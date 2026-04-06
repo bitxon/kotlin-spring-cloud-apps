@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "2.3.20"
     kotlin("plugin.spring") version "2.3.20"
-    id("org.springframework.boot") version "4.0.1"
+    id("org.springframework.boot") version "4.0.5"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -43,7 +43,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter")
-    testImplementation("org.testcontainers:testcontainers-localstack")
+    testImplementation("io.floci:spring-boot-testcontainers-floci:2.4.0")
     testImplementation("io.rest-assured:rest-assured:6.0.0")
     testImplementation("org.assertj:assertj-core")
     testImplementation("org.awaitility:awaitility")

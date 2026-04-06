@@ -1,29 +1,21 @@
 services:
-  localstack:
-    image: localstack/localstack:4.14.0
-    container_name: localstack
+  floci:
+    image: hectorvent/floci:1.5.2-aws
+    container_name: floci
     ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-    environment:
-      - SERVICES=dynamodb,s3,sqs
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_DEFAULT_REGION=us-east-1
-      - DEBUG=1
-      - DOCKER_HOST=unix:///var/run/docker.sock
+      - "127.0.0.1:4566:4566"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./src/test/resources/scripts:/etc/localstack/init/ready.d"
+      - "./src/test/resources/scripts:/etc/floci/init/start.d"
 
   dynamodb-admin:
     image: aaronshaf/dynamodb-admin
     container_name: dynamodb-admin
     environment:
-      - DYNAMO_ENDPOINT=http://localstack:4566
+      - DYNAMO_ENDPOINT=http://floci:4566
       - AWS_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
     ports:
       - "8001:8001"
     depends_on:
-      - localstack
+      - floci

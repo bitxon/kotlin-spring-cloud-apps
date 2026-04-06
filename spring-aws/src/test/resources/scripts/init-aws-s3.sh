@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/bin/sh
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_ACCESS_KEY_ID=test
+export AWS_SECRET_ACCESS_KEY=test
+export AWS_ENDPOINT_URL=http://localhost:4566
+
 echo "Creating S3 bucket..."
 
-awslocal s3api create-bucket --bucket student-bucket
+aws s3api create-bucket --bucket student-bucket
 
 echo "S3 bucket created."
-
