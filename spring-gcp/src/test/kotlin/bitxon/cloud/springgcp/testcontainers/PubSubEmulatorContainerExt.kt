@@ -4,7 +4,7 @@ import com.github.dockerjava.api.command.InspectContainerResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestClient
-import org.testcontainers.containers.PubSubEmulatorContainer
+import org.testcontainers.gcloud.PubSubEmulatorContainer
 import org.testcontainers.utility.DockerImageName
 import java.util.Base64
 

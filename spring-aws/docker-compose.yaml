@@ -1,12 +1,9 @@
-version: '3.8'
-
 services:
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack:4.14.0
     container_name: localstack
     ports:
       - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
     environment:
       - SERVICES=dynamodb,s3,sqs
       - AWS_ACCESS_KEY_ID=test

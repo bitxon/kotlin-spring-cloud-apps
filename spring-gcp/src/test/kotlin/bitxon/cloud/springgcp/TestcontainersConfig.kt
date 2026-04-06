@@ -1,12 +1,11 @@
 package bitxon.cloud.springgcp
 
 import bitxon.cloud.springgcp.testcontainers.PubSubEmulatorContainerExt
-import bitxon.cloud.springgcp.testcontainers.StorageEmulatorContainer
+import bitxon.cloud.springgcp.testcontainers.StorageEmulatorContainerExt
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.DynamicPropertyRegistrar
-import org.testcontainers.containers.FirestoreEmulatorContainer
-import org.testcontainers.containers.PubSubEmulatorContainer
+import org.testcontainers.gcloud.FirestoreEmulatorContainer
 import org.testcontainers.utility.DockerImageName
 import org.testcontainers.utility.MountableFile
 
@@ -17,8 +16,8 @@ class TestcontainersConfig {
     @Bean
     fun propertiesOverride(
         firestoreContainer: FirestoreEmulatorContainer,
-        pubSubContainer: PubSubEmulatorContainer,
-        storageContainer: StorageEmulatorContainer
+        pubSubContainer: PubSubEmulatorContainerExt,
+        storageContainer: StorageEmulatorContainerExt
     ): DynamicPropertyRegistrar {
         return DynamicPropertyRegistrar { registry ->
             // Common
@@ -38,7 +37,7 @@ class TestcontainersConfig {
         FirestoreEmulatorContainer(DockerImageName.parse("gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators"))
 
     @Bean
-    fun storageContainer() = StorageEmulatorContainer()
+    fun storageContainer() = StorageEmulatorContainerExt()
         .withInitData(MountableFile.forClasspathResource("data"))
 
     @Bean

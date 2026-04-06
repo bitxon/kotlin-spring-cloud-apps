@@ -1,9 +1,9 @@
 package bitxon.cloud.springaws.storage
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.awspring.cloud.s3.S3Template
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 import java.nio.charset.StandardCharsets.UTF_8
 
 

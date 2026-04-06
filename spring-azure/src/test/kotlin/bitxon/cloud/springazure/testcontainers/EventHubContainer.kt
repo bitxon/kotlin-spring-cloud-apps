@@ -26,8 +26,10 @@ class EventHubContainer() : GenericContainer<EventHubContainer>(DEFAULT_IMAGE) {
         waitingFor(Wait.forLogMessage(".*Emulator Service is Successfully Up!.*", 1))
         withExposedPorts(AMQP_PORT, KAFKA_PORT)
         withCreateContainerCmdModifier { cmd ->
-            cmd.withHostConfig(HostConfig().withPortBindings(
-                // Fore some reason Apache Kafka requires to be on port 9092 to be working
+            // Fore some reason Apache Kafka requires to be on port 9092 to be working
+            // Preserve existing HostConfig (extra hosts, etc.) and only add port bindings
+            val existingHostConfig = cmd.hostConfig ?: HostConfig()
+            cmd.withHostConfig(existingHostConfig.withPortBindings(
                 PortBinding(Ports.Binding.bindPort(KAFKA_PORT), ExposedPort(KAFKA_PORT)),
                 PortBinding(Ports.Binding.bindPort(AMQP_PORT), ExposedPort(AMQP_PORT))
             ))

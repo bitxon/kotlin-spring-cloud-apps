@@ -1,6 +1,10 @@
 
 # Spring Cloud AWS
 
+## Info
+[Spring Cloud AWS](https://awspring.io/)\
+[LocalStack](https://docs.localstack.cloud/overview/)
+
 ## Run Application
 1. Start Infrastructure
     ```shell

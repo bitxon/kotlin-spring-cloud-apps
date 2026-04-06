@@ -15,6 +15,11 @@ class AzuriteContainer : GenericContainer<AzuriteContainer>(DEFAULT_IMAGE) {
     init {
         withExposedPorts(BLOB_PORT, QUEUE_PORT, TABLE_PORT)
         waitingFor(Wait.forLogMessage(".*service is successfully listening at.*", 3))
+        withCommand("azurite", "--skipApiVersionCheck",
+            "--blobHost", "0.0.0.0", "--blobPort", BLOB_PORT.toString(),
+            "--queueHost", "0.0.0.0", "--queuePort", QUEUE_PORT.toString(),
+            "--tableHost", "0.0.0.0", "--tablePort", TABLE_PORT.toString()
+        )
     }
 
     val blobPort: Int

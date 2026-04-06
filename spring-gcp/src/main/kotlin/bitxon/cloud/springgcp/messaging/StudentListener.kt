@@ -2,10 +2,10 @@ package bitxon.cloud.springgcp.messaging
 
 import bitxon.cloud.springgcp.database.Student
 import bitxon.cloud.springgcp.database.StudentRepository
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.cloud.spring.pubsub.core.PubSubTemplate
 import com.google.cloud.spring.pubsub.support.BasicAcknowledgeablePubsubMessage
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
 
 @Service
 class StudentListener(

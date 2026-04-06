@@ -11,7 +11,7 @@ import java.net.ServerSocket
 private const val DOCKER_IMAGE = "fsouza/fake-gcs-server"
 private const val INIT_DATA_FOLDER = "/data"
 
-class StorageEmulatorContainer : GenericContainer<StorageEmulatorContainer>(DOCKER_IMAGE) {
+class StorageEmulatorContainerExt : GenericContainer<StorageEmulatorContainerExt>(DOCKER_IMAGE) {
 
     private val port: Int = getRandomAvailablePort()
 
@@ -32,7 +32,7 @@ class StorageEmulatorContainer : GenericContainer<StorageEmulatorContainer>(DOCK
         }
     }
 
-    fun withInitData(folderToCopy: MountableFile): StorageEmulatorContainer {
+    fun withInitData(folderToCopy: MountableFile): StorageEmulatorContainerExt {
         return withCopyFileToContainer(folderToCopy, INIT_DATA_FOLDER)
     }
 

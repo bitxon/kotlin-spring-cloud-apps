@@ -1,9 +1,9 @@
 package bitxon.cloud.springgcp.storage
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.google.cloud.storage.Storage
 import org.springframework.stereotype.Service
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.module.kotlin.readValue
 import java.nio.charset.StandardCharsets.UTF_8
 
 
