@@ -36,5 +36,14 @@ out/
 ### VS Code ###
 .vscode/
 
+### AI ###
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/worktrees/
+**/evals/
+**/*.skill
+**/*-workspace/
+**/iterations/
+
 ### Mac OS ###
 .DS_Store

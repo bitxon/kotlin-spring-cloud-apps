@@ -35,6 +35,7 @@ class TestcontainersConfig {
     @Bean
     fun cosmosDbContainer() = CosmosDbContainer()
         .withProtocol("http")
+        .withInitScript("01-setup.csh", MountableFile.forClasspathResource("configs/cosmosdb-init/01-setup.csh"))
 
     @Bean
     fun eventHubsContainer(azuriteContainer: AzuriteContainer) = EventHubContainer()

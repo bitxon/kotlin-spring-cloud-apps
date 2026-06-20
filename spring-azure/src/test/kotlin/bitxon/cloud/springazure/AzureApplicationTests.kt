@@ -32,37 +32,25 @@ class AzureApplicationTests {
     }
 
     @Test
-    fun diplomas() {
-        val diplomas = listOf(
-            Diploma("John Doe1", 1992),
-            Diploma("Jane Doe2", 2005)
-        )
+    fun studentsCosmosDbInit() {
+        val expectedStudent = Student("1", "Alice", "A")
 
-        // Create diplomas
-        RestAssured
-            .given().body(diplomas).contentType(ContentType.JSON)
-            .`when`().post("/diplomas")
-            .then().statusCode(200)
+        val result = RestAssured
+            .`when`().get("/students/${expectedStudent.id}")
+            .then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
 
-        // Get diplomas
-        val results = RestAssured
-            .`when`().get("/diplomas")
-            .then().statusCode(200).extract().`as`(object : TypeRef<List<Diploma>>() {})
-
-        assertThat(results).containsExactlyInAnyOrderElementsOf(diplomas)
+        assertThat(result).isEqualTo(expectedStudent)
     }
 
     @Test
-    fun students() {
-        val student = Student("1", "John Doe", "A")
+    fun studentsCosmosDbModify() {
+        val student = Student("100", "John Doe", "A")
 
-        // Create student
         RestAssured
             .given().body(student).contentType(ContentType.JSON)
             .`when`().post("/students")
             .then().statusCode(200)
 
-        // Get student
         val result = RestAssured
             .`when`().get("/students/${student.id}")
             .then().statusCode(200).extract().`as`(object : TypeRef<Student>() {})
@@ -70,15 +58,45 @@ class AzureApplicationTests {
         assertThat(result).isEqualTo(student)
     }
 
-    // Disabled: EventHub emulator v2.1.0 does not support Kafka 4.x protocol (kafka-clients 4.1.1
+    @Disabled("init not supported")
+    @Test
+    fun diplomasBlobStorageInit() {
+    }
+
+    @Test
+    fun diplomasBlobStorageModify() {
+        val diplomas = listOf(
+            Diploma("John Doe1", 1992),
+            Diploma("Jane Doe2", 2005)
+        )
+
+        RestAssured
+            .given().body(diplomas).contentType(ContentType.JSON)
+            .`when`().post("/diplomas")
+            .then().statusCode(200)
+
+        val results = RestAssured
+            .`when`().get("/diplomas")
+            .then().statusCode(200).extract().`as`(object : TypeRef<List<Diploma>>() {})
+
+        assertThat(results).containsExactlyInAnyOrderElementsOf(diplomas)
+    }
+
+    // EventHub emulator v2.2.0 does not support Kafka 4.x protocol (kafka-clients 4.1.1
     // pulled in by spring-boot-starter-kafka via Spring Boot 4.0.x). The ApiVersionsRequest handshake
     // fails immediately, making it impossible to produce or consume messages via Kafka against the emulator.
-    @Disabled
+    // Track: https://github.com/Azure/azure-event-hubs-emulator-installer/issues/72
+    @Disabled("EventHub emulator v2.2.0 does not support Kafka 4.x protocol")
     @Test
-    fun studentsFromEventHub() {
-        kafkaWriter.send("""{"id":"6","name":"Frank","status":"A"}""") // TODO find a way to do this via init script
+    fun studentsEventHubInit() {
+    }
 
-        val expectedStudent = Student("6", "Frank", "A") // Student created in init script for EventHub
+    @Disabled("EventHub emulator v2.2.0 does not support Kafka 4.x protocol")
+    @Test
+    fun studentsEventHubModify() {
+        kafkaWriter.send("""{"id":"101","name":"Tom","status":"A"}""")
+
+        val expectedStudent = Student("101", "Tom", "A")
 
         await().untilAsserted {
             val result = RestAssured

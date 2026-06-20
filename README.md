@@ -1,7 +1,7 @@
 # Spring Boot Cloud - AWS | Azure | GCP
 
 ## Local Development Comparison
-Comparison done as of 2026-04-01
+Comparison done as of 2026-06-20
 ### AWS
 | Service  | Docker Image | Init Resource | Init Data |
 |----------|--------------|---------------|-----------|
@@ -12,7 +12,7 @@ Comparison done as of 2026-04-01
 ### Azure
 | Service  | Docker Image | Init Resource | Init Data   |
 |----------|--------------|---------------|-------------|
-| CosmosDB | ✅ Official   | ❌No support   | ❌No support |
+| CosmosDB | ✅ Official   | ✅ Script      | ✅ Script    |
 | Storage  | ✅ Official   | ❌No support   | ❌No support |
 | EventHub | ✅ Official   | ✅ Config      | ❌No support |
 

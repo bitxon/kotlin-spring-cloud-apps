@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.PortBinding
 import com.github.dockerjava.api.model.Ports
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
+import org.testcontainers.images.builder.Transferable
 import org.testcontainers.utility.DockerImageName
 import java.net.ServerSocket
 import java.nio.file.Files
@@ -15,7 +16,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.outputStream
 
 private val DEFAULT_IMAGE: DockerImageName =
-    DockerImageName.parse("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-preview")
+    DockerImageName.parse("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:vnext-latest")
 
 class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
 
@@ -32,6 +33,11 @@ class CosmosDbContainer() : GenericContainer<CosmosDbContainer>(DEFAULT_IMAGE) {
             cmd.withHostConfig(HostConfig().withPortBindings(PortBinding(Ports.Binding.bindPort(port), ExposedPort(port))))
         }
         waitingFor(Wait.forLogMessage(".*Now listening on.*\\n", 1))
+    }
+
+    fun withInitScript(scriptName: String, script: Transferable): CosmosDbContainer {
+        withEnv("ENABLE_INIT_DATA", "true")
+        return withCopyToContainer(script, "/init/$scriptName")
     }
 
     fun withProtocol(protocol: String): CosmosDbContainer {

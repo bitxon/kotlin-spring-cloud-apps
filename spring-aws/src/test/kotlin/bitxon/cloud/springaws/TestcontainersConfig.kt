@@ -1,5 +1,6 @@
 package bitxon.cloud.springaws
 
+import bitxon.cloud.springaws.testutil.SqsWriter
 import io.floci.testcontainers.FlociContainer
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
@@ -19,5 +20,11 @@ class TestcontainersConfig {
             // Floci runs init scripts async after HTTP is up; wait for the last script's output
             // to ensure all resources (DynamoDB table, S3 bucket, SQS queue) are created before tests start
             .waitingFor(Wait.forLogMessage(".*SQS queue created.*", 1))
+    }
+
+    @Bean
+    fun sqsWriter(floci: FlociContainer): SqsWriter {
+        val queueUrl = "${floci.endpoint}/${floci.defaultAccountId}/student-queue"
+        return SqsWriter(floci.endpoint, queueUrl)
     }
 }

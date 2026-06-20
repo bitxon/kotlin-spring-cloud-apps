@@ -49,6 +49,16 @@ class PubSubEmulatorContainerExt(image: DockerImageName) : PubSubEmulatorContain
 
     }
 
+    fun publish(message: String) {
+        RestClient.builder().baseUrl("http://$emulatorEndpoint/v1/projects/your-project-id").build()
+            .post()
+            .uri("/topics/student-updates:publish")
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .body(mapOf("messages" to listOf(mapOf("data" to encodeBase64(message)))))
+            .retrieve()
+            .toBodilessEntity()
+    }
+
     private fun encodeBase64(value: String): String {
         return Base64.getEncoder().encodeToString(value.toByteArray())
     }
